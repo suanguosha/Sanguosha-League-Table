@@ -67,6 +67,7 @@ export default {
       notifications: false,
       sound: true,
       widgets: false,
+      numOfWinners: 0,
     };
   },
   methods: {
