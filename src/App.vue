@@ -12,13 +12,13 @@
         />
       </div>
       <v-spacer></v-spacer>
-      <v-btn class="mx-2" dark color="yellow darken-1">
+      <v-btn class="mx-2" dark color="yellow darken-1" @click="dialog= true">
         <v-icon left dark>
           mdi-pencil
         </v-icon>
         计分规则
       </v-btn>
-      <v-btn class="mx-2" dark color="green darken-1">
+      <v-btn class="mx-2" dark color="green darken-1" @click="addTable= true">
         <v-icon left dark>
           mdi-plus
         </v-icon>
@@ -27,23 +27,26 @@
     </v-app-bar>
 
     <v-main>
-      <Table />
+      <Table :addTable="addTable" @done="addTable = false"/>
+      <RuleSet :dialog="dialog" @close="dialog = false"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Table from "./components/Table";
-
+import RuleSet from './components/RuleSet'
 export default {
   name: "App",
 
   components: {
     Table,
+    RuleSet
   },
 
   data: () => ({
-    //
+    dialog: false,
+    addTable: false
   }),
 };
 </script>

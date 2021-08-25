@@ -5,7 +5,7 @@
         ><strong>三国杀国战裁判计分器</strong>
       </v-card-text>
     </v-card>
-    <v-data-table :headers="headers" :items="desserts" hide-default-footer>
+    <v-data-table :headers="headers" :items="players" hide-default-footer>
       <template v-slot:item.name="props">
         <v-text-field
           v-model="props.item.name"
@@ -13,9 +13,9 @@
           single-line
         ></v-text-field>
       </template>
-      <template v-slot:item.iron="props">
+      <template v-slot:item.country="props">
         <v-select
-          v-model="props.item.iron"
+          v-model="props.item.country"
           :items="countries"
           label="请选择国家"
           align="center"
@@ -28,8 +28,8 @@
           </template>
         </v-select>
       </template>
-      <template v-slot:item.optionA="props">
-        <v-simple-checkbox v-model="props.item.optionA"></v-simple-checkbox>
+      <template v-slot:item.aoZhan="props">
+        <v-simple-checkbox v-model="props.item.aoZhan"></v-simple-checkbox>
       </template>
     </v-data-table>
   </v-container>
@@ -37,62 +37,60 @@
 
 <script>
 export default {
+  props: {
+    addTable: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       countries: ["魏国", "蜀国", "吴国", "群雄", "野心家"],
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "选手",
           align: "start",
           sortable: false,
           value: "name",
         },
-        { text: "Calories", value: "calories" },
-        { text: "Iron (%)", value: "iron" },
-        { text: "optionA", value: "optionA" },
+        { text: "国家", value: "country" },
+        { text: "鏖战", value: "aoZhan" },
       ],
-      desserts: [
+      players: [
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
         {
           name: "",
-          calories: 159,
-          iron: "1%",
-          optionA: false,
+          country: "",
+          aoZhan: false,
         },
       ],
     };
@@ -113,5 +111,18 @@ export default {
       }
     },
   },
+  watch: {
+    addTable(value) {
+      if (value) {
+        // do some resetting
+        this.players.map((item) => { 
+          item.country = "";
+          item.aoZhan = false;
+          return item; 
+        });
+        this.$emit('done')
+      }
+    }
+  }
 };
 </script>
