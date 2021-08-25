@@ -18,18 +18,23 @@
           v-model="props.item.country"
           :items="countries"
           label="请选择国家"
-          align="center"
-          justify="center"
         >
           <template #selection="{ item }">
-            <v-chip :color="countryColor(item)" text-color="white">{{
-              item
-            }}</v-chip>
+            <v-chip :color="countryColor(item.value)" text-color="white">
+              <v-avatar left :color="countryColor(item.value)" class="darken-4">
+                {{ playersInCountry(item.value) }} </v-avatar
+              >{{ item.text }}</v-chip
+            >
           </template>
         </v-select>
       </template>
       <template v-slot:item.aoZhan="props">
         <v-simple-checkbox v-model="props.item.aoZhan"></v-simple-checkbox>
+      </template>
+      <template v-slot:item.totalPts="{ item }">
+        <v-chip :color="scoreColor(item.totalPts)" dark>
+          {{ item.totalPts }}
+        </v-chip>
       </template>
     </v-data-table>
   </v-container>
@@ -40,57 +45,95 @@ export default {
   props: {
     addTable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      countries: ["魏国", "蜀国", "吴国", "群雄", "野心家"],
-      headers: [
-        {
-          text: "选手",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "国家", value: "country" },
-        { text: "鏖战", value: "aoZhan" },
-      ],
+      // player info, dynamically updated
       players: [
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
         },
         {
           name: "",
           country: "",
           aoZhan: false,
+          totalPts: 0,
+        },
+        {
+          name: "",
+          country: "",
+          aoZhan: false,
+          totalPts: 0,
+        },
+      ],
+      // titles for data table
+      headers: [
+        {
+          text: "选手",
+          align: "start",
+          value: "name",
+          width: "30%",
+        },
+        { text: "国家", value: "country", width: "30%" },
+        { text: "鏖战", value: "aoZhan", width: "30%" },
+        { text: "总分", value: "totalPts", width: "10%" },
+      ],
+      // countries for v-select 魏国4 蜀国3 吴国2 群雄1 野心家0
+      countries: [
+        {
+          text: "魏国",
+          value: 4,
+        },
+        {
+          text: "蜀国",
+          value: 3,
+        },
+        {
+          text: "吴国",
+          value: 2,
+        },
+        {
+          text: "群雄",
+          value: 1,
+        },
+        {
+          text: "野心家",
+          value: 0,
         },
       ],
     };
@@ -98,31 +141,42 @@ export default {
   methods: {
     countryColor(country) {
       switch (country) {
-        case "魏国":
+        case 4:
           return "blue";
-        case "蜀国":
+        case 3:
           return "red";
-        case "吴国":
+        case 2:
           return "green";
-        case "群雄":
+        case 1:
           return "grey";
         default:
           return "purple";
       }
+    },
+    scoreColor(score) {
+      if (score > 10) return "red";
+      else if (score > 5) return "orange";
+      else return "green";
+    },
+    playersInCountry(country) {
+      return this.players.reduce(
+        (acc, cur) => acc + (cur.country === country),
+        0
+      );
     },
   },
   watch: {
     addTable(value) {
       if (value) {
         // do some resetting
-        this.players.map((item) => { 
+        this.players.map((item) => {
           item.country = "";
           item.aoZhan = false;
-          return item; 
+          return item;
         });
-        this.$emit('done')
+        this.$emit("done");
       }
-    }
-  }
+    },
+  },
 };
 </script>
