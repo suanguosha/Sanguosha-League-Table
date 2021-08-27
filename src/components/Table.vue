@@ -8,6 +8,7 @@
       </v-card-text>
     </v-card>
     <v-data-table :headers="headers" :items="players" hide-default-footer>
+      <!-- customize "item.name" slot in v-data-table, access "props" binded on this slot  -->
       <template v-slot:item.name="props">
         <v-text-field
           v-model="props.item.name"
@@ -41,6 +42,7 @@
           :value="props.item.killedPlayers"
           hide-details
         >
+          <!-- dropdown v-list-item, stop propogation @click, enable multiple selection -->
           <template v-slot:item="{ index, item }">
             <v-list-item @click.stop="multipleSelection(item, props)">{{
               item.text
